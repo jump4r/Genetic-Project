@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ShooterAI : MonoBehaviour {
+public class Ship : MonoBehaviour {
 
 	public GameObject bullet;
 	
@@ -14,16 +14,19 @@ public class ShooterAI : MonoBehaviour {
 	public int team;
 
 	// Ammo Management
-	private int ammoCapacity = 20;
+	private int ammoCount = 20;
 	private float shootCooldown = -1;
 	private float reloadTime = 0.6f;
 
 	// Movement and Rotation
 	private float moveSpeed = 6f;
 
+	// Behaviors
+	AttackBehaviour attack;
+
 	// Use this for initialization
 	void Start () {
-		
+		attack = GetComponent<AttackBehaviour> ();
 	}
 	
 	// Update is called once per frame
@@ -40,7 +43,7 @@ public class ShooterAI : MonoBehaviour {
 		}
 
 		// Reload
-		if (ammoCapacity <= 0) {
+		if (ammoCount <= 0) {
 			Invoke ("Reload", reloadTime);
 			gameObject.renderer.material = reload;
 		}
@@ -48,22 +51,27 @@ public class ShooterAI : MonoBehaviour {
 		shootCooldown -= Time.deltaTime;
 	}
 
+
 	// Shoot forwards
 	void Shoot() {
-		if (ammoCapacity > 0) {
+
+		/* if (ammoCount > 0) {
 			// Create and Initialize Bullet
 			GameObject tmp = (GameObject)GameObject.Instantiate (bullet, transform.position, transform.rotation);
 			Bullet b = tmp.GetComponent<Bullet>();
 			b.Initialize(team);
 
-			ammoCapacity--;
+			ammoCount--;
 			shootCooldown = 0.2f;
-		}
+		} */
+
+		attack.Shoot ();
 	}
+
 
 	// Spend <reloadTime> seconds to reload back to the max ammo cap;
 	void Reload() {
-		ammoCapacity = 20;
+		ammoCount = 20;
 		gameObject.renderer.material = color;
 	}
 
@@ -75,8 +83,21 @@ public class ShooterAI : MonoBehaviour {
 		}
 	}
 
-	// Kill Agent
+	// Kill Agent, Will probalby have it respawn mayyybe? If you get the time brah do what you gotta do. 
 	void Die() {
 		Destroy (gameObject);
+	}
+
+	/* Get and Set Functions */
+	public int GetAmmoCount() {
+		return ammoCount;
+	}
+
+	public void DecreaseAmmoCount() {
+		ammoCount--;
+	}
+
+	public int GetTeam() {
+		return team;
 	}
 }

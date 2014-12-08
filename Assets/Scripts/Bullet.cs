@@ -31,9 +31,9 @@ public class Bullet : MonoBehaviour {
 
 	void OnTriggerEnter(Collider col) {
 		if (col.tag == "Agent") {
-			if (col.gameObject.GetComponent<ShooterAI>().team != team) {
+			if (col.gameObject.GetComponent<Ship>().team != team) {
 				Destroy (gameObject);
-				col.gameObject.GetComponent<ShooterAI>().InflictDamage(damage);
+				col.gameObject.GetComponent<Ship>().InflictDamage(damage);
 			}
 		}
 	}

@@ -45,10 +45,12 @@ public class Individual : MonoBehaviour {
 		fitness = 0;
 	}
 
+	// Return Size of the Gene
 	public int Size() {
 		return genes.Length;
 	}
 
+	// Return Current Fitness
 	public int GetFitness() {
 		if (fitness == 0) {
 			// Get the fitness
