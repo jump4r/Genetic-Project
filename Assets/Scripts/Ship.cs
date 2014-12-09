@@ -7,7 +7,7 @@ public class Ship : MonoBehaviour {
 	
 	// Materila List
 	public Material color;
-	public Material reload;
+	public Material reloadColor;
 
 	// Player and Health Management
 	private int health = 100;
@@ -15,6 +15,7 @@ public class Ship : MonoBehaviour {
 
 	// Ammo Management
 	private int ammoCount = 20;
+	private int ammoCapacity = 20;
 	private float shootCooldown = -1;
 	private float reloadTime = 0.6f;
 
@@ -40,31 +41,19 @@ public class Ship : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		// Rotate 
-		// transform.Rotate (Vector3.forward);
+		movement.Rotate ();
 
 		// Move
 		movement.Move ();
 
-		// Fire
-		if (shootCooldown < 0) {
-			Shoot ();
-		}
+		// Shoot
+		attack.Shoot ();
 
 		// Reload
-		if (ammoCount <= 0) {
-			Invoke ("Reload", reloadTime);
-			gameObject.renderer.material = reload;
-		}
+		attack.ReloadInit ();
 
 		shootCooldown -= Time.deltaTime;
 	}
-
-
-	// Shoot forwards
-	void Shoot() {
-		attack.Shoot ();
-	}
-
 
 	// Spend <reloadTime> seconds to reload back to the max ammo cap;
 	void Reload() {
@@ -98,6 +87,14 @@ public class Ship : MonoBehaviour {
 
 	public void DecreaseAmmoCount() {
 		ammoCount--;
+	}
+
+	public void SetAmmoCount(int a) {
+		ammoCount = a;
+	}
+
+	public int GetAmmoCapacity () {
+		return ammoCapacity;
 	}
 
 	public int GetTeam() {

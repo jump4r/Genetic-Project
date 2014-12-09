@@ -6,7 +6,7 @@ public class TargetBehaviour : MonoBehaviour {
 
 	private Ship ship;
 	private int team = 0; // BLUE TEAM = 1 ||| RED TEAM = 2
-	private GameObject target; // This shit's current target.
+	public GameObject target; // This shit's current target.
 
 	private List<GameObject> targetPool = new List<GameObject>(); // List of available targets
 
@@ -33,7 +33,7 @@ public class TargetBehaviour : MonoBehaviour {
 		}*/
 
 		foreach (GameObject agent in allAgents) {
-			//Debug.Log (allAgents.Length);
+			Debug.Log (allAgents.Length);
 			if (agent.GetComponent<Ship>().GetTeam () != team) {
 				targetPool.Add(agent);
 			}
@@ -49,7 +49,7 @@ public class TargetBehaviour : MonoBehaviour {
 
 		// Rotaiton Towards the target
 		else {
-			transform.rotation = Quaternion.Lerp (transform.rotation, GetAngle (target), Time.deltaTime * 2f);
+			// transform.rotation = Quaternion.Lerp (transform.rotation, GetAngle (target), Time.deltaTime * 2f);
 		}
 
 	}
@@ -94,6 +94,14 @@ public class TargetBehaviour : MonoBehaviour {
 		target = t;
 	}
 
+	public GameObject GetTarget() {
+		if (target != null) {
+			return target;
+		}
+
+		return null;
+	}
+
 	/// <summary>
 	/// Removes the target.
 	/// </summary>
@@ -106,7 +114,7 @@ public class TargetBehaviour : MonoBehaviour {
 	/// </summary>
 	/// <returns>The angle.</returns>
 	/// <param name="temp">Temp.</param>
-	Quaternion GetAngle(GameObject target) {
+	public Quaternion GetAngle(GameObject target) {
 		Vector3 dir = target.transform.position - transform.position;
 		float angle = Mathf.Atan2 (dir.y, dir.x) * Mathf.Rad2Deg - 90;
 		Quaternion q = Quaternion.AngleAxis (angle, Vector3.forward);
