@@ -28,7 +28,7 @@ public class AttackBehaviour : MonoBehaviour {
 			// Create and Initialize Bullet
 			GameObject tmp = (GameObject)GameObject.Instantiate (bullet, transform.position, transform.rotation);
 			Bullet b = tmp.GetComponent<Bullet>();
-			b.Initialize(team);
+			b.Initialize(team, gameObject);
 			
 			ship.DecreaseAmmoCount();
 			shotLoaded = false;

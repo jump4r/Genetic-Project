@@ -7,17 +7,28 @@ public class Population : MonoBehaviour {
 	private GameObject[] blueIndividuals;
 
 	// Public Varialbles for Inidividual Init.
-	public int popSize;
+	public int popSize = 2;
 	public bool init;
+	public int totalAgentsRemaining;
 
 	// Game Object prefabs
 	public GameObject[] prefabs;
 
 	// Initialize Vector start positions
-	public Vector3[] spawnLocations;
+	private Vector3[] spawnLocations;
+
+	// For fitness calculaiton
+	private FitnessCalculation fc;
 
 	// Use this for initialization
 	void Start () {
+		fc = GetComponent<FitnessCalculation> ();
+		spawnLocations = new Vector3[popSize];
+		for (int i = 0; i < spawnLocations.Length; i++) {
+			spawnLocations[i].x = Random.Range (-10f, 10f);
+			spawnLocations[i].y = Random.Range (-10f, 10f);
+			spawnLocations[i].z = 0;
+		}
 		// Debug.Log ("Population Script: Loaded");
 		Initialize (spawnLocations.Length, true);
 	}
@@ -37,6 +48,7 @@ public class Population : MonoBehaviour {
 			if ( i % 2 == 0 ) {
 				GameObject newIndividual = (GameObject)prefabs[i % 2];
 				GameObject rtn = (GameObject)GameObject.Instantiate(newIndividual, spawnLocations[i], Quaternion.identity);
+				rtn.GetComponent<Individual>().indexInPopulation = i;
 				blueIndividuals[blueCurrentIndex] = rtn;
 				blueCurrentIndex++;
 			}
@@ -44,6 +56,7 @@ public class Population : MonoBehaviour {
 			if ( i % 2 == 1) {
 				GameObject newIndividual = (GameObject)prefabs[i % 2];
 				GameObject rtn = (GameObject)GameObject.Instantiate(newIndividual, spawnLocations[i], Quaternion.identity);
+				rtn.GetComponent<Individual>().indexInPopulation = i;
 				redIndividuals[redCurrentIndex] = rtn;
 				redCurrentIndex++;
 			}
@@ -90,7 +103,7 @@ public class Population : MonoBehaviour {
 		return fittest;
 	}
 
-	// Get Population Size
+	// Get Population Sizes for Red and Blue.
 	public int RedSize() {
 		return redIndividuals.Length;
 	}
@@ -99,5 +112,30 @@ public class Population : MonoBehaviour {
 		return blueIndividuals.Length;
 	}
 
+	/// <summary>
+	/// Updates the total remaining Agents
+	/// </summary>
+	public void UpdateTotalRemainingAgents() {
+		GameObject[] totalAgents = GameObject.FindGameObjectsWithTag ("Agent");
+		// If there is only one agent left, or only Agents of one team left get the fitness of that agent, this is the end game signal.
+		int totalBlueAgents = 0;
+		int totalRedAgents = 0;
+		for (int i = 0; i < totalAgents.Length; i++) {
+			if (totalAgents[i].GetComponent<Ship>().GetTeam() == 1) { // BLUE TEAM = 1 ||| RED TEAM = 2
+				totalBlueAgents++;
+			}
+			else {
+				totalRedAgents++;
+			}
+		}
+
+		Debug.Log ("BLUE Agents: " + totalBlueAgents + ", RED Agents: " + totalRedAgents);
+		if (totalBlueAgents == 0 || totalRedAgents == 0) {
+			for (int i = 0; i < totalAgents.Length; i++) {
+				Individual indi = totalAgents[i].GetComponent<Individual>();
+				fc.SetFitness(indi, false);
+			}
+		}
+	}
 
 }

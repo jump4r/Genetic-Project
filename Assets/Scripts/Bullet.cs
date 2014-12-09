@@ -5,6 +5,7 @@ public class Bullet : MonoBehaviour {
 
 	public static int GENERATION_SPEED;
 
+	private GameObject owner;
 	private float team = -1;
 	private float bulletSpeed = 15f;
 	private float timeAlive = 4f;
@@ -16,8 +17,9 @@ public class Bullet : MonoBehaviour {
 	}
 
 	// Initalize from Instantiation
-	public void Initialize(int _team) {
+	public void Initialize(int _team, GameObject _owner) {
 		team = _team;
+		owner = _owner;
 	}
 
 	// Update is called once per frame
@@ -29,10 +31,16 @@ public class Bullet : MonoBehaviour {
 		timeAlive -= Time.deltaTime;
 	}
 
+	/// <summary>
+	/// Destroys bullet, Deals damange, updates the owner of the bullet that it hit an enemy
+	/// </summary>
+	/// <param name="col">Col.</param>
 	void OnTriggerEnter(Collider col) {
 		if (col.tag == "Agent") {
 			if (col.gameObject.GetComponent<Ship>().team != team) {
 				Destroy (gameObject);
+				if (owner != null)
+					owner.GetComponent<Ship>().IndividualHitEnemy ();
 				col.gameObject.GetComponent<Ship>().InflictDamage(damage);
 			}
 		}

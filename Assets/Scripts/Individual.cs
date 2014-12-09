@@ -5,12 +5,22 @@ public class Individual : MonoBehaviour {
 
 	private static int geneLength = 4;					
 	private int[] genes = new int[geneLength];	// Genes for individual
-	private int fitness = 0;						// Calcuate fitness
+
+	// Fitness Variables for Calculation
+	public float fitness = 0;						// Calcuate fitness
+	public int numTimesHit = 0;
+	public int numHits = 0;
+	public int numKills = 0;
+
+	public int indexInPopulation;
+
+	private FitnessCalculation fitnessCalculator;
 
 	// Use this for initialization
 	void Start () {
 		Initialize ();
-		PrintGene ();
+		// PrintGene ();
+		fitnessCalculator = GameObject.Find ("_SCRIPTS").GetComponent<FitnessCalculation> ();
 	}
 
 	// Public Initialze Indivdual. Declare Genes. 
@@ -51,9 +61,10 @@ public class Individual : MonoBehaviour {
 	}
 
 	// Return Current Fitness
-	public int GetFitness() {
+	public float GetFitness() {
 		if (fitness == 0) {
 			// Get the fitness
+			fitness = fitnessCalculator.GetFitness(this);
 		}
 		return fitness;
 	}

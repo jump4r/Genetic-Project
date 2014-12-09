@@ -14,7 +14,15 @@ public class TargetBehaviour : MonoBehaviour {
 	void Start () {
 		ship = GetComponent<Ship> ();
 		team = ship.GetTeam ();
+	
+		UpdateTargetPool ();
+	}
 
+	/// <summary>
+	/// Update Target Pool
+	/// </summary>
+	public void UpdateTargetPool() {
+		targetPool.Clear ();
 		// Declare and add to target pool
 		GameObject[] allAgents = GameObject.FindGameObjectsWithTag ("Agent");
 		foreach (GameObject agent in allAgents) {
@@ -23,7 +31,7 @@ public class TargetBehaviour : MonoBehaviour {
 			}
 		}
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		// Find a target -- Ideally this will be based off of what the genetic weights.
@@ -31,12 +39,24 @@ public class TargetBehaviour : MonoBehaviour {
 			FindTarget ();
 		}
 
+		// Rotaiton Towards the target
+		else {
+			transform.rotation = Quaternion.Lerp (transform.rotation, GetAngle (target), Time.deltaTime * 2f);
+		}
+
 	}
 
 	/// <summary>
 	/// Finds a random target.
+	/// BUG: Update Target List after enemy dies.
 	/// </summary>
 	public void FindTarget() {
+		// Return null if there is nothing in the target pool
+		UpdateTargetPool ();
+		if (targetPool.Count < 1) {
+			return;
+		}
+
 		// Find Closest Target I suppose.
 		float closestDist = 99f;
 		int targetIndex = 0;
@@ -64,5 +84,25 @@ public class TargetBehaviour : MonoBehaviour {
 	/// <param name="t">T.</param>
 	void SetTarget(GameObject t) {
 		target = t;
+	}
+
+	/// <summary>
+	/// Removes the target.
+	/// </summary>
+	void RemoveTarget() {
+		target = null;
+	}
+
+	/// <summary>
+	/// Gets the angle between the self & Target Object
+	/// </summary>
+	/// <returns>The angle.</returns>
+	/// <param name="temp">Temp.</param>
+	Quaternion GetAngle(GameObject target) {
+		Vector3 dir = target.transform.position - transform.position;
+		float angle = Mathf.Atan2 (dir.y, dir.x) * Mathf.Rad2Deg - 90;
+		Quaternion q = Quaternion.AngleAxis (angle, Vector3.forward);
+		// Debug.Log ("Current Angle is " + q);
+		return q;
 	}
 }
