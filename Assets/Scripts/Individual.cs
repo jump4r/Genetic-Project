@@ -14,7 +14,7 @@ public class Individual : MonoBehaviour {
 
 	public int indexInPopulation;
 
-	private FitnessCalculation fitnessCalculator;
+	 FitnessCalculation fitnessCalculator;
 
 	// Use this for initialization
 	void Start () {

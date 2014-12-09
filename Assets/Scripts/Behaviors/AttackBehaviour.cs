@@ -4,7 +4,7 @@ using System.Collections;
 public class AttackBehaviour : MonoBehaviour {
 
 	private Ship ship;
-	private int team;
+	private int team; // BLUE TEAM = 1 ||| RED TEAM = 2
 	private GameObject bullet;
 	
 	private float shotCooldown = 0.2f;

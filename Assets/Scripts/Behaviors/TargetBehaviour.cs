@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class TargetBehaviour : MonoBehaviour {
 
 	private Ship ship;
-	private int team; // BLUE TEAM = 1 ||| RED TEAM = 2
+	private int team = 0; // BLUE TEAM = 1 ||| RED TEAM = 2
 	private GameObject target; // This shit's current target.
 
 	private List<GameObject> targetPool = new List<GameObject>(); // List of available targets
@@ -25,7 +25,15 @@ public class TargetBehaviour : MonoBehaviour {
 		targetPool.Clear ();
 		// Declare and add to target pool
 		GameObject[] allAgents = GameObject.FindGameObjectsWithTag ("Agent");
+
+		// Some dumbass error that makes it so that shit isn't referencing an object even though it totally is.
+		/*
+		if (allAgents.Length < 2) {
+			return;
+		}*/
+
 		foreach (GameObject agent in allAgents) {
+			//Debug.Log (allAgents.Length);
 			if (agent.GetComponent<Ship>().GetTeam () != team) {
 				targetPool.Add(agent);
 			}

@@ -24,6 +24,7 @@ public class Ship : MonoBehaviour {
 	// Behaviors and Individual
 	AttackBehaviour attack;
 	TargetBehaviour target;
+	MovementBehaviour movement;
 
 	Individual individual;
 
@@ -31,6 +32,8 @@ public class Ship : MonoBehaviour {
 	void Start () {
 		attack = GetComponent<AttackBehaviour> ();
 		target = GetComponent<TargetBehaviour> ();
+		movement = GetComponent<MovementBehaviour> ();
+
 		individual = GetComponent<Individual> ();
 	}
 	
@@ -40,7 +43,7 @@ public class Ship : MonoBehaviour {
 		// transform.Rotate (Vector3.forward);
 
 		// Move
-		// transform.Translate (Vector3.up * Time.deltaTime * moveSpeed);
+		movement.Move ();
 
 		// Fire
 		if (shootCooldown < 0) {
