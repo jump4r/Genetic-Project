@@ -23,7 +23,7 @@ public class Population : MonoBehaviour {
 	private CrossoverAlgorithm crossover;
 
 	// Game Time, games should not take more than one minue
-	private static float lifetime = 10f;
+	public float lifetime = 10f;
 	private float timer = 10f;
 
 	// All of the genes for all of the players.
@@ -177,11 +177,13 @@ public class Population : MonoBehaviour {
 	public void ResetGeneration() {
 		Debug.Log ("Resetting Generation");
 		KillAgents ();
-		float[] redAgentsFitness = fc.GetRedIndividualsFitness ();
+		float[] redAgentsFitness = fc.GetRedIndividualsFitness () ;
 		float[] blueAgentsFitness = fc.GetBlueIndividualsFitness ();
 
 		int maxRedFitnessIndex = fc.GetMaxFitness (redAgentsFitness);
+		Debug.Log ("Local Max Fitness (RED): " + fc.fitnessForIndividual[maxRedFitnessIndex * 2 + 1]);
 		int maxBlueFitnessIndex = fc.GetMaxFitness (blueAgentsFitness);
+		Debug.Log ("Local Max Fitness (BLUE): " + fc.fitnessForIndividual[maxBlueFitnessIndex * 2]);
 
 		// Update GUI Elements.
 		GuiManager gm = GetComponent<GuiManager> ();
@@ -190,13 +192,16 @@ public class Population : MonoBehaviour {
 
 		// Perform crossover of the genes with crossover algorithm.
 		int[][] endGenes = fc.allGenes;
-			Debug.Log ("Just to check endGenes[0][0]: " + endGenes [0] [0]);
+
+		//Debug.Log ("RED Best Genome: " + fc.PrintGenome (endGenes[maxRedFitnessIndex * 2 + 1]));
 		for (int i = 1; i < popSize; i += 2) {
-			endGenes[i] = crossover.Crossover (endGenes[maxRedFitnessIndex], endGenes[i]);
+			//Debug.Log ("Old Genome for index " + i + ": " + fc.PrintGenome (endGenes[i]));
+			endGenes[i] = crossover.Crossover (endGenes[maxRedFitnessIndex * 2 + 1], endGenes[i]);
+			//Debug.Log ("New Genome for index " + i + ": " + fc.PrintGenome (endGenes[i]));
 		}
 
 		for (int i = 0; i < popSize; i += 2) {
-			endGenes[i] = crossover.Crossover (endGenes[maxBlueFitnessIndex], endGenes[i]);
+			endGenes[i] = crossover.Crossover (endGenes[maxBlueFitnessIndex * 2], endGenes[i]);
 		}
 
 		allGenes = endGenes;
@@ -212,6 +217,7 @@ public class Population : MonoBehaviour {
 		CalculateWinner (agents);
 		for (int i = 0; i < agents.Length; i++) {
 			fc.SetFitness (agents[i].GetComponent<Individual>(), false);
+			//Debug.Log ("Fitness On Agent Index: " + agents[i].GetComponent<Individual>().indexInPopulation + " Set to " + fc.fitnessForIndividual[agents[i].GetComponent<Individual>().indexInPopulation]);
 			Destroy (agents[i]);
 		}
 	}

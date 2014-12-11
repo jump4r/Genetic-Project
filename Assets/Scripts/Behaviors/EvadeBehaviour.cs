@@ -10,6 +10,7 @@ public class EvadeBehaviour : MonoBehaviour {
 	public BoxCollider trigger;
 	public bool incomming = false;
 	private int team = -1;
+	public bool manModeEnabled = false;
 
 	// Use this for initialization
 	void Start () {
@@ -45,6 +46,17 @@ public class EvadeBehaviour : MonoBehaviour {
 	/// </summary>
 	public void RemoveTargetedBy() {
 		targetedBy = null;	
+	}
+
+	/// <summary>
+	/// ENABLE MAN MODE. MAN MODE ENABLED. WE ARE REALLY REALLY OUT HERE.
+	/// #DEFEATOURENEMIES. #REMOVETHEIRLIMBS.
+	/// </summary>
+	public void MAN_MODE() {
+		Vector3 removeSens = new Vector3 (0, 0, 0);
+		trigger.size = removeSens;
+		manModeEnabled = true;
+
 	}
 
 	/// <summary>

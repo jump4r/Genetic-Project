@@ -33,7 +33,7 @@ public class TargetBehaviour : MonoBehaviour {
 		}*/
 
 		foreach (GameObject agent in allAgents) {
-			Debug.Log (allAgents.Length);
+			//Debug.Log (allAgents.Length);
 			if (agent.GetComponent<Ship>().GetTeam () != team) {
 				targetPool.Add(agent);
 			}
@@ -85,6 +85,20 @@ public class TargetBehaviour : MonoBehaviour {
 	/// <param name="helpTarget">Help target.</param>
 	public void FindTarget(GameObject helpTarget) {
 
+	}
+
+	/// <summary>
+	/// Finds the random target.
+	/// </summary>
+	public void FindRandomTarget() {
+		UpdateTargetPool ();
+		if (targetPool.Count < 1) {
+			return;
+		}
+
+		// Find Random Target
+		target = targetPool [Random.Range (0, targetPool.Count)];
+		target.GetComponent<EvadeBehaviour> ().SetTargetedBy (gameObject);
 	}
 
 	/// <summary>

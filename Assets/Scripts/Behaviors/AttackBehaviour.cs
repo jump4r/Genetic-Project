@@ -9,12 +9,15 @@ public class AttackBehaviour : MonoBehaviour {
 	
 	private float attackSpeed = 0.2f;	// Attack speed determed by Gene[]
 	private bool shotLoaded = true;
+	private float attackSensitivity = 2.5f;
 
 	private float attackFOV = 20f;
 
 	private float reloadTime = 0.6f;
+	private float timeSinceLastAttack = 0f;
 
 	private TargetBehaviour target;
+	private EvadeBehaviour evade;
 
 	// Use this for initialization
 	void Start () {
@@ -23,16 +26,27 @@ public class AttackBehaviour : MonoBehaviour {
 		bullet = Resources.Load<GameObject> ("Bullet");
 
 		target = GetComponent<TargetBehaviour> ();
+		evade = GetComponent<EvadeBehaviour> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		timeSinceLastAttack += Time.deltaTime;
+		if (timeSinceLastAttack > attackSensitivity) {
+			if (evade.targetedBy != null && !evade.manModeEnabled) {
+				evade.MAN_MODE ();
+				timeSinceLastAttack = 0;
+			}
+			else {
+				target.FindRandomTarget();
+				timeSinceLastAttack = 0;
+			}
+		}
 	}
 
 	/* SET Variables based off of gene */
 	public void SetAttackSpeed(int _attackSpeed) {
-		attackSpeed = (float)_attackSpeed / 20f;
+		attackSpeed = (float)_attackSpeed / 25f;
 	}
 
 	public void SetReloadTime(int _reloadTime) {
@@ -41,6 +55,10 @@ public class AttackBehaviour : MonoBehaviour {
 
 	public void SetAttackFOV(int _attackFOV) {
 		attackFOV = (float)_attackFOV * 4f;
+	}
+
+	public void SetAttackSensitivity(int _attackSensitivity) {
+		attackSensitivity = 1.5f + ((float)_attackSensitivity * .2f);
 	}
 
 	/// <summary>
@@ -52,7 +70,9 @@ public class AttackBehaviour : MonoBehaviour {
 			GameObject tmp = (GameObject)GameObject.Instantiate (bullet, transform.position, transform.rotation);
 			Bullet b = tmp.GetComponent<Bullet>();
 			b.Initialize(team, gameObject);
-			
+
+			timeSinceLastAttack = 0f;
+
 			ship.DecreaseAmmoCount();
 			shotLoaded = false;
 			Invoke ("LoadShot", attackSpeed);

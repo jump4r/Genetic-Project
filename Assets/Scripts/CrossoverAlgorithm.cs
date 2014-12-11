@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CrossoverAlgorithm : MonoBehaviour {
 
-	private static float mutationRate = 0.05f;
+	private static float mutationRate = 0.10f;
 	private static int mutationOffset = 2;
 
 	private FitnessCalculation fc;
@@ -27,28 +27,33 @@ public class CrossoverAlgorithm : MonoBehaviour {
 
 		int crossPoint = Random.Range (0, individual1.Length);
 		int[] rtn = new int[individual1.Length];
-	
 		for (int i = 0; i < rtn.Length; i++) {
 
-			if (i <= crossPoint) {
+			/*if (i <= crossPoint) {
 				rtn[i] = individual1[i];
 			}
 			else {
 				rtn[i] = individual2[i];
-			}
+			}*/
 
 			/* Another Crossover Algorithm */
-			// rtn[i] = individual1[i] / 2 + individual2[i] / 2;
-			Mutate (rtn);
+			rtn[i] = (individual1[i] + individual2[i]) / 2;
+			if (Mutate (rtn)) {
+				// Debug.Log ("MUTATION on rtn index: " + i);
+				rtn[i] += Mathf.Min (rtn[i] + mutationOffset, 9); 
+				rtn[Random.Range (0, rtn.Length)] = Mathf.Max(0, rtn[i] - mutationOffset);
+			}
 		}
 		return rtn;
 	}
 
-	private void Mutate(int[] individual) {
+	private bool Mutate(int[] individual) {
 		// Account for mutations.
 		if (Random.value <= mutationRate) {
-			individual[Random.Range (0, individual.Length)] += mutationOffset;
-			individual[Random.Range (0, individual.Length)] -= mutationOffset;
+			//individual[Random.Range (0, individual.Length)] += mutationOffset;
+			//individual[Random.Range (0, individual.Length)] -= mutationOffset;
+			return true;
 		}
+		return false;
 	}
 }

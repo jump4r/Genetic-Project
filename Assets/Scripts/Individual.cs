@@ -4,7 +4,7 @@ using System.Collections;
 public class Individual : MonoBehaviour {
 
 	private static int geneLength = 8;					
-	private int[] genes = new int[geneLength];	// Genes for individual
+	public int[] genes = new int[geneLength];	// Genes for individual
 
 	// Fitness Variables for Calculation
 	public float fitness = 0;						// Calcuate fitness
@@ -46,7 +46,7 @@ public class Individual : MonoBehaviour {
 	/// 4 - Rotation Speed
 	/// 5 - Evade Detection Range. (Will gradually decrease over time as the Agent doesn't shoot)
 	/// 6 - Likelyhood to Assist / Retarget.
-	/// 7 -
+	/// 7 - Dummy 
 	/// </summary>
 	private void SetGene() {
 		for (int i = 0; i < genes.Length; i++) {
@@ -88,12 +88,13 @@ public class Individual : MonoBehaviour {
 	/// Sets the behavoiurs.
 	/// </summary>
 	private void SetBehaviours() {
-		ship.attack.SetAttackSpeed (1);
+		ship.attack.SetAttackSpeed (genes [0]);
 		ship.attack.SetAttackFOV (genes [1]);
 		ship.attack.SetReloadTime (genes [2]);
 		ship.movement.SetMoveSpeed (genes [3]);
 		ship.movement.SetRotationSpeed (genes [4]);
 		ship.evade.SetEvadeSensitivity (genes [5]);
+		ship.attack.SetAttackSensitivity (genes [6]);
 	}
 
 	/* Getters and setters */

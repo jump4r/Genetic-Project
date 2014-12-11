@@ -22,11 +22,11 @@ public class MovementBehaviour : MonoBehaviour {
 
 	// Set Variables based off of the genes
 	public void SetMoveSpeed(int _moveSpeed) {
-		moveSpeed = (float)_moveSpeed * 2f;
+		moveSpeed = (float)_moveSpeed * 2.3f;
 	}
 
 	public void SetRotationSpeed(int _rotationSpeed) {
-		rotationSpeed = (float)_rotationSpeed * 2f;
+		rotationSpeed = (float)_rotationSpeed * 1.65f;
 	}
 
 	/// <summary>

@@ -55,7 +55,7 @@ public class FitnessCalculation : MonoBehaviour {
 		// Calculate fitness with a specific algorithm
 		fitness = 1 - (individual.numTimesHit * .05f) + (individual.numHits * .01f) + (individual.numKills * .1f);
 		fitnessForIndividual [individual.indexInPopulation] = fitness;
-
+		//Debug.Log ("Set fitness to individual " + individual.indexInPopulation + " to " + fitnessForIndividual[individual.indexInPopulation]);
 		// PrintGene (individual.indexInPopulation);
 
 		// After Calculating the fitness if an agent that has died, figure out if we can end the game.
@@ -70,16 +70,21 @@ public class FitnessCalculation : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Gets the max fitness.
+	/// Gets the max fitness from the agents in the pool var.
 	/// </summary>
 	/// <returns>The max fitness.</returns>
+	/// <bug> not returning max fitness value
 	public int GetMaxFitness(float[] pool) {
-		int maxFitness = -1;
+		// Debug.Log ("Length of Pool " + pool.Length); // Trying to find cause of this weird MaxFitness bugg
+		int maxFitness = 0;
 		for ( int i = 0; i < pool.Length; i++ ) {
-			if (pool[i] > maxFitness) {
+			//Debug.Log ("Index: " + i + " has fitness " + pool[i]);
+			if (pool[i] > pool[maxFitness]) {
 				maxFitness = i;
 			}
 		}
+
+		//Debug.Log ("Return value: " + maxFitness);
 		return maxFitness;
 	}
 
@@ -107,5 +112,14 @@ public class FitnessCalculation : MonoBehaviour {
 			rtn += allGenes[index][i].ToString ();
 		}
 		Debug.Log ("Indivudual Gene Sequence: " + rtn);
+	}
+
+	/* Prints Genome */
+	public string PrintGenome(int[] genome) {
+		string rtn = "";
+		for (int i = 0; i < genome.Length; i++) {
+			rtn += genome[i].ToString ();
+		}
+		return rtn;
 	}
 }
