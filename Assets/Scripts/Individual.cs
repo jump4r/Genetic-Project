@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Individual : MonoBehaviour {
 
-	private static int geneLength = 4;					
+	private static int geneLength = 8;					
 	private int[] genes = new int[geneLength];	// Genes for individual
 
 	// Fitness Variables for Calculation
@@ -15,20 +15,20 @@ public class Individual : MonoBehaviour {
 	public int indexInPopulation;
 
 	 FitnessCalculation fitnessCalculator;
+	Ship ship;
 
 	// Use this for initialization
 	void Start () {
 		Initialize ();
+		SetGene ();
+		SetBehaviours ();
 		// PrintGene ();
-		fitnessCalculator = GameObject.Find ("_SCRIPTS").GetComponent<FitnessCalculation> ();
 	}
 
 	// Public Initialze Indivdual. Declare Genes. 
 	public void Initialize() {
-		for (int i = 0; i < geneLength; i++) {
-			int gene = Random.Range (0, 2);
-			genes[i] = gene;
-		}
+		fitnessCalculator = GameObject.Find ("_SCRIPTS").GetComponent<FitnessCalculation> ();
+		ship = GetComponent<Ship> ();
 	}
 	
 	// Update is called once per frame
@@ -36,13 +36,64 @@ public class Individual : MonoBehaviour {
 		
 	}
 
-	/* Prints the Individual Gene */
+	/// <summary>
+	/// Sets the gene.
+	/// Gene-Behaviour Relationships are as follows, in index - behaviour order
+	/// 0 - Attack Speed
+	/// 1 - Attack FOV
+	/// 2 - Reload Speed
+	/// 3 - Move Speed
+	/// 4 - Rotation Speed
+	/// 5 - Evade Detection Range. (Will gradually decrease over time as the Agent doesn't shoot)
+	/// 6 - Likelyhood to Assist / Retarget.
+	/// 7 -
+	/// </summary>
+	private void SetGene() {
+		for (int i = 0; i < genes.Length; i++) {
+			genes[i] = 1;
+		}
+
+		// Give the Gene random values.
+		int remainingPoints = 23;
+		for (int i = 0; i < remainingPoints; i++) {
+			int addToGene = Random.Range (0, 8);
+			if (genes[addToGene] < 9) {
+				genes[addToGene] += 1;
+			}
+		}
+
+		fitnessCalculator.allGenes [indexInPopulation] = genes;
+	}
+
+	// Sets gene with preseet gene
+	public void SetGene(int[] _genes) {
+		Initialize ();
+		genes = _genes;
+		// PrintGene ();
+		SetBehaviours();
+	}
+
+	/// <summary>
+	/// Prints the gene.
+	/// </summary>
 	private void PrintGene() {
 		string rtn = "";
 		for (int i = 0; i < genes.Length; i++) {
 			rtn += genes[i].ToString ();
 		}
-		Debug.Log ("Indivudual Gene Sequence: " + rtn);
+		Debug.Log ("Indivudual Gene Sequence, Generated from Crossover: " + rtn);
+	}
+
+	/// <summary>
+	/// Sets the behavoiurs.
+	/// </summary>
+	private void SetBehaviours() {
+		ship.attack.SetAttackSpeed (1);
+		ship.attack.SetAttackFOV (genes [1]);
+		ship.attack.SetReloadTime (genes [2]);
+		ship.movement.SetMoveSpeed (genes [3]);
+		ship.movement.SetRotationSpeed (genes [4]);
+		ship.evade.SetEvadeSensitivity (genes [5]);
 	}
 
 	/* Getters and setters */

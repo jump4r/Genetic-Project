@@ -20,6 +20,15 @@ public class MovementBehaviour : MonoBehaviour {
 	
 	}
 
+	// Set Variables based off of the genes
+	public void SetMoveSpeed(int _moveSpeed) {
+		moveSpeed = (float)_moveSpeed * 2f;
+	}
+
+	public void SetRotationSpeed(int _rotationSpeed) {
+		rotationSpeed = (float)_rotationSpeed * 2f;
+	}
+
 	/// <summary>
 	/// Move this agent.
 	/// </summary>

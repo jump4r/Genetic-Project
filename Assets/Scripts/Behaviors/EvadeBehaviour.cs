@@ -3,10 +3,11 @@ using System.Collections;
 
 public class EvadeBehaviour : MonoBehaviour {
 
-	private GameObject targetedBy;
+	public GameObject targetedBy;
 	private Quaternion evadeRotation;
 	private Ship ship;
 
+	public BoxCollider trigger;
 	public bool incomming = false;
 	private int team = -1;
 
@@ -21,8 +22,15 @@ public class EvadeBehaviour : MonoBehaviour {
 	
 	}
 
+	// Made my laugh like an ohohojou-sama #GETFKED #TECHNICALITIES. #UPDATEORDER.
 	void LateUpdate() {
 		incomming = false;
+	}
+
+	// SET variables based off the genes.
+	public void SetEvadeSensitivity(int _evadeSensitivity) {
+		Vector3 newSens = new Vector3 (_evadeSensitivity, _evadeSensitivity, 1f);
+		trigger.size = newSens;
 	}
 
 	/// <summary>

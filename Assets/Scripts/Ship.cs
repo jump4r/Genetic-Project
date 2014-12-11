@@ -17,24 +17,26 @@ public class Ship : MonoBehaviour {
 	private int ammoCount = 20;
 	private int ammoCapacity = 20;
 	private float shootCooldown = -1;
-	private float reloadTime = 0.6f;
-
-	// Movement and Rotation
-	private float moveSpeed = 6f;
-
+	
 	// Behaviors and Individual
-	AttackBehaviour attack;
-	TargetBehaviour target;
-	MovementBehaviour movement;
+	public AttackBehaviour attack;
+	public TargetBehaviour target;
+	public MovementBehaviour movement;
+	public EvadeBehaviour evade;
 
 	Individual individual;
 
 	// Use this for initialization
 	void Start () {
+		Initialize ();
+	}
+
+	public void Initialize() {
 		attack = GetComponent<AttackBehaviour> ();
 		target = GetComponent<TargetBehaviour> ();
 		movement = GetComponent<MovementBehaviour> ();
-
+		evade = GetComponent<EvadeBehaviour> ();
+		
 		individual = GetComponent<Individual> ();
 	}
 	
@@ -73,6 +75,9 @@ public class Ship : MonoBehaviour {
 
 	// Kill Agent, Will probalby have it respawn mayyybe? If you get the time brah do what you gotta do. 
 	void Die() {
+		if (evade.targetedBy != null) {
+			evade.targetedBy.GetComponent<Ship>().IndividualKilledEnemy();
+		}
 		// Update FitnessCalculator with fitness of this indidvidual
 		FitnessCalculation fc = GameObject.Find ("_SCRIPTS").GetComponent<FitnessCalculation> ();
 		fc.SetFitness (individual, true);
@@ -108,5 +113,9 @@ public class Ship : MonoBehaviour {
 
 	public void IndividualHitByEnemy() {
 		individual.numTimesHit++;
+	}
+
+	public void IndividualKilledEnemy() {
+		individual.numKills++;
 	}
 }

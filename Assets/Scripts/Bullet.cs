@@ -7,8 +7,8 @@ public class Bullet : MonoBehaviour {
 
 	private GameObject owner;
 	private int team = -1;
-	private float bulletSpeed = 15f;
-	private float timeAlive = 4f;
+	private float bulletSpeed = 30f;
+	private float timeAlive = 3f;
 	private int damage = 10;
 	
 	// Use this for initialization

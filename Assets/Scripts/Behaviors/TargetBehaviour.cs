@@ -76,6 +76,7 @@ public class TargetBehaviour : MonoBehaviour {
 			}
 		}
 		target = targetPool [targetIndex];
+		target.GetComponent<EvadeBehaviour> ().SetTargetedBy (gameObject);
 	}
 
 	/// <summary>
@@ -106,6 +107,7 @@ public class TargetBehaviour : MonoBehaviour {
 	/// Removes the target.
 	/// </summary>
 	void RemoveTarget() {
+		target.GetComponent<EvadeBehaviour> ().RemoveTargetedBy ();
 		target = null;
 	}
 

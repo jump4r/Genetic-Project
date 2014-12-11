@@ -30,6 +30,19 @@ public class AttackBehaviour : MonoBehaviour {
 	
 	}
 
+	/* SET Variables based off of gene */
+	public void SetAttackSpeed(int _attackSpeed) {
+		attackSpeed = (float)_attackSpeed / 20f;
+	}
+
+	public void SetReloadTime(int _reloadTime) {
+		reloadTime = (10 - (float)_reloadTime) / 10f;
+	}
+
+	public void SetAttackFOV(int _attackFOV) {
+		attackFOV = (float)_attackFOV * 4f;
+	}
+
 	/// <summary>
 	/// Shoot a bullet
 	/// </summary>
@@ -66,7 +79,7 @@ public class AttackBehaviour : MonoBehaviour {
 		Vector3 targetDir = targetGameObject.transform.position - transform.position;
 		Vector3 selfDir = transform.up;
 		float angle = Vector3.Angle (targetDir, selfDir);
-		Debug.Log ("Angle between " + name + " and " + targetGameObject.name + " is " + angle);
+		// Debug.Log ("Angle between " + name + " and " + targetGameObject.name + " is " + angle);
 		Debug.DrawRay (targetDir, selfDir);
 		if (angle < attackFOV) {
 			return true;
